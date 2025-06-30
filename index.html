@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Everyn – Explore a human-centered timeline of inventions across every era.">
+  <meta name="keywords" content="inventions, technology, history, timeline, innovation">
+  <meta name="author" content="Argeng Machahary" />
+  <title>Everyn – Every Idea. Every Era.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #1f3a52;
+      --secondary-color: #2c4a6b;
+      --accent-color: #4a90e2;
+      --light-bg: #fdfdfd;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --text-light: #777;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 80px 20px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: linear-gradient(90deg, #4a90e2, #1f3a52);
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 3.5rem;
+      margin: 0;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 10px;
+    }
+
+    .stats {
+      text-align: center;
+      margin: 40px 0;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+
+    .stats span {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .filter-container {
+      text-align: center;
+      margin: 20px 0 40px;
+    }
+
+    .filter-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .filter-select {
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      background: white;
+      font-size: 1rem;
+      cursor: pointer;
+      min-width: 250px;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 1em;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .era-section {
+      margin-bottom: 50px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .era-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .era-header {
+      background: var(--secondary-color);
+      color: white;
+      padding: 18px 25px;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .era-header:hover {
+      background: #233a56;
+    }
+
+    .era-header span:last-child {
+      font-size: 1rem;
+      font-family: 'Open Sans', sans-serif;
+      opacity: 0.9;
+    }
+
+    .era-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 25px;
+    }
+
+    .timeline-item {
+      background: var(--card-bg);
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .timeline-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      border-color: var(--accent-color);
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent-color);
+      border-radius: 8px 0 0 8px;
+    }
+
+    .timeline-item .year {
+      font-weight: bold;
+      color: var(--accent-color);
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .timeline-item h3 {
+      margin: 5px 0 10px;
+      font-family: 'Playfair Display', Georgia, serif;
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+
+    .timeline-item .inventor {
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+
+    .timeline-item .category {
+      display: inline-block;
+      background: rgba(74, 144, 226, 0.1);
+      color: var(--accent-color);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      padding: 40px 20px;
+      background: #f5f7fa;
+      border-top: 1px solid #e1e5eb;
+      margin-top: 60px;
+    }
+
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 40px;
+      display: none;
+      color: var(--text-light);
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+      
+      header p {
+        font-size: 1.1rem;
+      }
+      
+      .era-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .era-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .era-header span:last-child {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Everyn</h1>
+    <p>Every Idea. Every Era.</p>
+  </header>
+
+  <div class="stats">
+    Showing <span id="count">0</span> inventions across <span id="era-count">0</span> eras
+  </div>
+
+  <div class="filter-container">
+    <label for="category-filter" class="filter-label">Filter by Category:</label>
+    <select id="category-filter" class="filter-select" aria-label="Filter inventions by category">
+      <option value="all">All Categories</option>
+      <!-- Options will be added dynamically -->
+    </select>
+  </div>
+
+  <div id="loading">Loading inventions...</div>
+  <main id="invention-container"></main>
+
+  <footer>
+    <p>© 2025 Everyn. Created by Argeng Machahary.</p>
+    <p>Contact: <a href="mailto:argeng.official99@gmail.com">argeng.official99@gmail.com</a> | 
+       Follow: <a href="https://instagram.com/argeng_machahary_" target="_blank" aria-label="Follow Argeng Machahary on Instagram">@argeng_machahary_</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        // Complete list of all inventions
+        const inventions = [
+          { year: -10000, name: "Agriculture", inventor: "Neolithic Humans", category: "Agriculture", era: "Prehistoric" },
+          { year: -8000, name: "Pottery", inventor: "Ancient Cultures", category: "Materials", era: "Prehistoric" },
+          { year: -6000, name: "Irrigation", inventor: "Mesopotamians", category: "Agriculture", era: "Prehistoric" },
+          { year: -5000, name: "Sailboat", inventor: "Ancient Egyptians", category: "Transportation", era: "Prehistoric" },
+          { year: -4000, name: "Metalworking (Copper)", inventor: "Ancient Near East", category: "Materials", era: "Prehistoric" },
+          { year: -3500, name: "Wheel", inventor: "Mesopotamians", category: "Technology", era: "Ancient" },
+          { year: -3000, name: "Writing", inventor: "Sumerians", category: "Communication", era: "Ancient" },
+          { year: -3000, name: "Papyrus", inventor: "Ancient Egyptians", category: "Communication", era: "Ancient" },
+          { year: -2000, name: "Bronze", inventor: "Ancient Civilizations", category: "Materials", era: "Ancient" },
+          { year: -1500, name: "Alphabet", inventor: "Phoenicians", category: "Communication", era: "Ancient" },
+          { year: -700, name: "Lens (Nimrud)", inventor: "Assyrians", category: "Science", era: "Ancient" },
+          { year: -600, name: "Coin Currency", inventor: "Lydians", category: "Economics", era: "Ancient" },
+          { year: -500, name: "Canal", inventor: "Persians", category: "Engineering", era: "Ancient" },
+          { year: -400, name: "Catapult", inventor: "Ancient Greeks", category: "Military", era: "Ancient" },
+          { year: -300, name: "Compass", inventor: "Chinese Han Dynasty", category: "Navigation", era: "Ancient" },
+          { year: -200, name: "Paper", inventor: "Chinese Han Dynasty", category: "Communication", era: "Ancient" },
+          { year: 105, name: "Modern Paper", inventor: "Cai Lun", category: "Communication", era: "Ancient" },
+          { year: 132, name: "Seismoscope", inventor: "Zhang Heng", category: "Science", era: "Ancient" },
+          { year: 200, name: "Rudder", inventor: "Chinese", category: "Navigation", era: "Ancient" },
+          { year: 500, name: "Horse Collar", inventor: "Chinese", category: "Agriculture", era: "Medieval" },
+          { year: 600, name: "Windmill", inventor: "Persians", category: "Energy", era: "Medieval" },
+          { year: 700, name: "Porcelain", inventor: "Chinese Tang Dynasty", category: "Materials", era: "Medieval" },
+          { year: 800, name: "Gunpowder", inventor: "Chinese alchemists", category: "Military", era: "Medieval" },
+          { year: 850, name: "Algebra", inventor: "Al-Khwarizmi", category: "Mathematics", era: "Medieval" },
+          { year: 900, name: "University", inventor: "Fatimids (Al-Azhar)", category: "Education", era: "Medieval" },
+          { year: 950, name: "Numerals 0-9", inventor: "Indian mathematicians", category: "Mathematics", era: "Medieval" },
+          { year: 1000, name: "Compass (navigational)", inventor: "Chinese Song Dynasty", category: "Navigation", era: "Medieval" },
+          { year: 1044, name: "Movable Type Printing", inventor: "Bi Sheng", category: "Communication", era: "Medieval" },
+          { year: 1100, name: "Chess", inventor: "Indian origin, evolved in Persia", category: "Games", era: "Medieval" },
+          { year: 1200, name: "Eyeglasses", inventor: "Italian craftsmen", category: "Medical", era: "Medieval" },
+          { year: 1250, name: "Cannon", inventor: "Chinese", category: "Military", era: "Medieval" },
+          { year: 1286, name: "Mechanical Clock", inventor: "European monks", category: "Timekeeping", era: "Medieval" },
+          { year: 1300, name: "Spinning Wheel", inventor: "Indian/Chinese", category: "Textiles", era: "Medieval" },
+          { year: 1400, name: "Perspective in Art", inventor: "Filippo Brunelleschi", category: "Art", era: "Medieval" },
+          { year: 1440, name: "Printing Press", inventor: "Johannes Gutenberg", category: "Technology", era: "Renaissance" },
+          { year: 1510, name: "Pocket Watch", inventor: "Peter Henlein", category: "Timekeeping", era: "Renaissance" },
+          { year: 1590, name: "Microscope", inventor: "Zacharias Janssen", category: "Science", era: "Renaissance" },
+          { year: 1608, name: "Telescope", inventor: "Hans Lippershey", category: "Science", era: "Renaissance" },
+          { year: 1609, name: "Kepler's Laws", inventor: "Johannes Kepler", category: "Science", era: "Renaissance" },
+          { year: 1620, name: "Slide Rule", inventor: "William Oughtred", category: "Mathematics", era: "Renaissance" },
+          { year: 1642, name: "Calculating Machine", inventor: "Blaise Pascal", category: "Computing", era: "Renaissance" },
+          { year: 1656, name: "Pendulum Clock", inventor: "Christiaan Huygens", category: "Timekeeping", era: "Renaissance" },
+          { year: 1672, name: "Steam Engine", inventor: "Thomas Savery", category: "Energy", era: "Renaissance" },
+          { year: 1687, name: "Laws of Motion", inventor: "Isaac Newton", category: "Science", era: "Renaissance" },
+          { year: 1712, name: "Atmospheric Engine", inventor: "Thomas Newcomen", category: "Energy", era: "Industrial" },
+          { year: 1714, name: "Mercury Thermometer", inventor: "Daniel Fahrenheit", category: "Science", era: "Industrial" },
+          { year: 1733, name: "Flying Shuttle", inventor: "John Kay", category: "Textiles", era: "Industrial" },
+          { year: 1752, name: "Lightning Rod", inventor: "Benjamin Franklin", category: "Science", era: "Industrial" },
+          { year: 1764, name: "Spinning Jenny", inventor: "James Hargreaves", category: "Textiles", era: "Industrial" },
+          { year: 1769, name: "Improved Steam Engine", inventor: "James Watt", category: "Energy", era: "Industrial" },
+          { year: 1776, name: "Submarine", inventor: "David Bushnell", category: "Military", era: "Industrial" },
+          { year: 1783, name: "Hot Air Balloon", inventor: "Montgolfier Brothers", category: "Transportation", era: "Industrial" },
+          { year: 1784, name: "Bifocals", inventor: "Benjamin Franklin", category: "Medical", era: "Industrial" },
+          { year: 1785, name: "Power Loom", inventor: "Edmund Cartwright", category: "Textiles", era: "Industrial" },
+          { year: 1792, name: "Gas Lighting", inventor: "William Murdoch", category: "Energy", era: "Industrial" },
+          { year: 1793, name: "Cotton Gin", inventor: "Eli Whitney", category: "Agriculture", era: "Industrial" },
+          { year: 1796, name: "Vaccination", inventor: "Edward Jenner", category: "Medical", era: "Industrial" },
+          { year: 1799, name: "Lithography", inventor: "Alois Senefelder", category: "Printing", era: "Industrial" },
+          { year: 1901, name: "Vacuum Cleaner", inventor: "Hubert Booth", category: "Home", era: "Modern" },
+          { year: 1902, name: "Air Conditioning", inventor: "Willis Carrier", category: "Home", era: "Modern" },
+          { year: 1903, name: "Airplane", inventor: "Wright Brothers", category: "Transportation", era: "Modern" },
+          { year: 1904, name: "Teabag", inventor: "Thomas Sullivan", category: "Food", era: "Modern" },
+          { year: 1906, name: "Sonar", inventor: "Lewis Nixon", category: "Military", era: "Modern" },
+          { year: 1907, name: "Plastic (Bakelite)", inventor: "Leo Baekeland", category: "Materials", era: "Modern" },
+          { year: 1908, name: "Assembly Line", inventor: "Henry Ford", category: "Manufacturing", era: "Modern" },
+          { year: 1911, name: "Hydrogen Bomb Concept", inventor: "Ernest Rutherford", category: "Military", era: "Modern" },
+          { year: 1913, name: "Stainless Steel", inventor: "Harry Brearley", category: "Materials", era: "Modern" },
+          { year: 1915, name: "Tank", inventor: "British Army", category: "Military", era: "Modern" },
+          { year: 1916, name: "Supermarket", inventor: "Clarence Saunders", category: "Retail", era: "Modern" },
+          { year: 1921, name: "Insulin", inventor: "Frederick Banting", category: "Medical", era: "Modern" },
+          { year: 1923, name: "Television", inventor: "Philo Farnsworth", category: "Communication", era: "Modern" },
+          { year: 1926, name: "Liquid Rocket", inventor: "Robert Goddard", category: "Space", era: "Modern" },
+          { year: 1927, name: "Electronic Television", inventor: "Philo Farnsworth", category: "Communication", era: "Modern" },
+          { year: 1928, name: "Penicillin", inventor: "Alexander Fleming", category: "Medical", era: "Modern" },
+          { year: 1930, name: "Jet Engine", inventor: "Frank Whittle", category: "Transportation", era: "Modern" },
+          { year: 1931, name: "Electron Microscope", inventor: "Ernst Ruska", category: "Science", era: "Modern" },
+          { year: 1933, name: "FM Radio", inventor: "Edwin Armstrong", category: "Communication", era: "Modern" },
+          { year: 1935, name: "Radar", inventor: "Robert Watson-Watt", category: "Military", era: "Modern" },
+          { year: 1937, name: "Nylon", inventor: "Wallace Carothers", category: "Materials", era: "Modern" },
+          { year: 1938, name: "Ballpoint Pen", inventor: "László Bíró", category: "Tools", era: "Modern" },
+          { year: 1942, name: "Nuclear Reactor", inventor: "Enrico Fermi", category: "Energy", era: "Modern" },
+          { year: 1943, name: "Aqua-Lung", inventor: "Jacques Cousteau", category: "Diving", era: "Modern" },
+          { year: 1945, name: "Atomic Bomb", inventor: "Manhattan Project", category: "Military", era: "Modern" },
+          { year: 1946, name: "Microwave Oven", inventor: "Percy Spencer", category: "Home", era: "Modern" },
+          { year: 1947, name: "Transistor", inventor: "Bell Labs", category: "Electronics", era: "Modern" },
+          { year: 1948, name: "Velcro", inventor: "George de Mestral", category: "Materials", era: "Modern" },
+          { year: 1949, name: "Pacemaker", inventor: "John Hopps", category: "Medical", era: "Modern" },
+          { year: 1951, name: "UNIVAC Computer", inventor: "J. Presper Eckert", category: "Computing", era: "Digital" },
+          { year: 1952, name: "Barcode", inventor: "Norman Woodland", category: "Retail", era: "Digital" },
+          { year: 1954, name: "Solar Cell", inventor: "Bell Labs", category: "Energy", era: "Digital" },
+          { year: 1955, name: "Polio Vaccine", inventor: "Jonas Salk", category: "Medical", era: "Digital" },
+          { year: 1956, name: "Hard Drive", inventor: "IBM", category: "Computing", era: "Digital" },
+          { year: 1957, name: "Sputnik Satellite", inventor: "Soviet Union", category: "Space", era: "Digital" },
+          { year: 1958, name: "Integrated Circuit", inventor: "Jack Kilby", category: "Electronics", era: "Digital" },
+          { year: 1959, name: "Microchip", inventor: "Robert Noyce", category: "Electronics", era: "Digital" },
+          { year: 1960, name: "Laser", inventor: "Theodore Maiman", category: "Science", era: "Digital" },
+          { year: 1961, name: "Human Spaceflight", inventor: "Yuri Gagarin", category: "Space", era: "Digital" },
+          { year: 1962, name: "LED", inventor: "Nick Holonyak", category: "Electronics", era: "Digital" },
+          { year: 1963, name: "Computer Mouse", inventor: "Douglas Engelbart", category: "Computing", era: "Digital" },
+          { year: 1964, name: "Bullet Train", inventor: "Japan", category: "Transportation", era: "Digital" },
+          { year: 1965, name: "Kevlar", inventor: "Stephanie Kwolek", category: "Materials", era: "Digital" },
+          { year: 1967, name: "ATM", inventor: "John Shepherd-Barron", category: "Finance", era: "Digital" },
+          { year: 1969, name: "Internet (ARPANET)", inventor: "U.S. Defense Dept", category: "Computing", era: "Digital" },
+          { year: 1970, name: "Floppy Disk", inventor: "IBM", category: "Computing", era: "Digital" },
+          { year: 1971, name: "Email", inventor: "Ray Tomlinson", category: "Communication", era: "Digital" },
+          { year: 1972, name: "Video Game Console", inventor: "Ralph Baer", category: "Entertainment", era: "Digital" },
+          { year: 1973, name: "Mobile Phone", inventor: "Martin Cooper", category: "Communication", era: "Digital" },
+          { year: 1974, name: "Rubik's Cube", inventor: "Ernő Rubik", category: "Games", era: "Digital" },
+          { year: 1975, name: "Personal Computer", inventor: "Ed Roberts", category: "Computing", era: "Digital" },
+          { year: 1976, name: "Inkjet Printer", inventor: "IBM", category: "Computing", era: "Digital" },
+          { year: 1977, name: "MRI Scanner", inventor: "Raymond Damadian", category: "Medical", era: "Digital" },
+          { year: 1979, name: "Walkman", inventor: "Sony", category: "Audio", era: "Digital" },
+          { year: 1980, name: "Flash Memory", inventor: "Fujio Masuoka", category: "Electronics", era: "Digital" },
+          { year: 1981, name: "Space Shuttle", inventor: "NASA", category: "Space", era: "Digital" },
+          { year: 1983, name: "Internet (TCP/IP)", inventor: "Vint Cerf, Bob Kahn", category: "Computing", era: "Digital" },
+          { year: 1984, name: "DNA Fingerprinting", inventor: "Alec Jeffreys", category: "Science", era: "Digital" },
+          { year: 1985, name: "Windows OS", inventor: "Microsoft", category: "Computing", era: "Digital" },
+          { year: 1986, name: "3D Printing", inventor: "Chuck Hull", category: "Manufacturing", era: "Digital" },
+          { year: 1989, name: "World Wide Web", inventor: "Tim Berners-Lee", category: "Computing", era: "Digital" },
+          { year: 1990, name: "Hubble Telescope", inventor: "NASA/ESA", category: "Space", era: "Digital" },
+          { year: 1991, name: "Linux", inventor: "Linus Torvalds", category: "Computing", era: "Digital" },
+          { year: 1993, name: "GPS", inventor: "U.S. Defense Dept", category: "Navigation", era: "Digital" },
+          { year: 1994, name: "PlayStation", inventor: "Sony", category: "Entertainment", era: "Digital" },
+          { year: 1995, name: "DVD", inventor: "Tech consortium", category: "Media", era: "Digital" },
+          { year: 1996, name: "Webmail", inventor: "Hotmail", category: "Communication", era: "Digital" },
+          { year: 1997, name: "Hybrid Car", inventor: "Toyota", category: "Transportation", era: "Digital" },
+          { year: 1998, name: "Google Search", inventor: "Larry Page, Sergey Brin", category: "Computing", era: "Digital" },
+          { year: 1999, name: "Wi-Fi", inventor: "IEEE", category: "Communication", era: "Digital" },
+          { year: 2000, name: "USB Flash Drive", inventor: "Trek Technology", category: "Computing", era: "Information" },
+          { year: 2001, name: "Wikipedia", inventor: "Jimmy Wales", category: "Information", era: "Information" },
+          { year: 2002, name: "Camera Phone", inventor: "Sharp", category: "Communication", era: "Information" },
+          { year: 2003, name: "Skype", inventor: "Niklas Zennström", category: "Communication", era: "Information" },
+          { year: 2004, name: "Facebook", inventor: "Mark Zuckerberg", category: "Social Media", era: "Information" },
+          { year: 2005, name: "YouTube", inventor: "Chad Hurley", category: "Media", era: "Information" },
+          { year: 2006, name: "Twitter", inventor: "Jack Dorsey", category: "Social Media", era: "Information" },
+          { year: 2007, name: "iPhone", inventor: "Apple", category: "Communication", era: "Information" },
+          { year: 2008, name: "Bitcoin", inventor: "Satoshi Nakamoto", category: "Finance", era: "Information" },
+          { year: 2009, name: "WhatsApp", inventor: "Jan Koum", category: "Communication", era: "Information" },
+          { year: 2010, name: "iPad", inventor: "Apple", category: "Computing", era: "Information" },
+          { year: 2011, name: "Siri", inventor: "Apple", category: "AI", era: "Information" },
+          { year: 2012, name: "CRISPR", inventor: "Jennifer Doudna", category: "Science", era: "Information" },
+          { year: 2013, name: "Smartwatch", inventor: "Multiple companies", category: "Wearables", era: "Information" },
+          { year: 2014, name: "Oculus Rift", inventor: "Oculus VR", category: "VR", era: "Information" },
+          { year: 2015, name: "Self-driving Car", inventor: "Various", category: "Transportation", era: "Information" },
+          { year: 2016, name: "Pokémon GO", inventor: "Niantic", category: "AR", era: "Information" },
+          { year: 2017, name: "Wireless Earbuds", inventor: "Apple", category: "Audio", era: "Information" },
+          { year: 2018, name: "Gene-edited Babies", inventor: "He Jiankui", category: "Science", era: "Information" },
+          { year: 2019, name: "Foldable Phone", inventor: "Samsung", category: "Communication", era: "Information" },
+          { year: 2020, name: "mRNA Vaccines", inventor: "BioNTech, Moderna", category: "Medical", era: "Information" },
+          { year: 2021, name: "NFT Boom", inventor: "Various", category: "Digital Art", era: "Information" },
+          { year: 2022, name: "ChatGPT", inventor: "OpenAI", category: "AI", era: "Information" },
+          { year: 2023, name: "Quantum Computing", inventor: "Various", category: "Computing", era: "Information" },
+          { year: 2024, name: "Neuralink Implant", inventor: "Neuralink", category: "Medical", era: "Information" }
+        ];
+
+        const container = document.getElementById('invention-container');
+        const countElement = document.getElementById('count');
+        const eraCountElement = document.getElementById('era-count');
+        const loading = document.getElementById('loading');
+        const categoryFilter = document.getElementById('category-filter');
+
+        const eras = [
+          { name: "Prehistoric", start: -10000, end: -3500 },
+          { name: "Ancient", start: -3500, end: 500 },
+          { name: "Medieval", start: 500, end: 1500 },
+          { name: "Renaissance", start: 1500, end: 1700 },
+          { name: "Industrial", start: 1700, end: 1900 },
+          { name: "Modern", start: 1900, end: 1950 },
+          { name: "Digital", start: 1950, end: 2000 },
+          { name: "Information", start: 2000, end: 2025 }
+        ];
+
+        // Extract unique categories and populate filter
+        const categories = [...new Set(inventions.map(inv => inv.category))];
+        categories.sort();
+        
+        categories.forEach(category => {
+          const option = document.createElement('option');
+          option.value = category;
+          option.textContent = category;
+          categoryFilter.appendChild(option);
+        });
+
+        // Filter functionality
+        categoryFilter.addEventListener('change', () => {
+          const selectedCategory = categoryFilter.value;
+          let filteredInventions = inventions;
+          
+          if (selectedCategory !== 'all') {
+            filteredInventions = inventions.filter(inv => inv.category === selectedCategory);
+          }
+          
+          renderInventions(filteredInventions);
+        });
+
+        function renderInventions(data) {
+          loading.style.display = 'block';
+          container.innerHTML = '';
+          
+          const eraGroups = {};
+          eras.forEach(era => {
+            eraGroups[era.name] = data.filter(inv => inv.era === era.name);
+          });
+
+          let visibleEras = 0;
+          
+          eras.forEach(era => {
+            const eraInventions = eraGroups[era.name];
+            if (eraInventions.length > 0) {
+              visibleEras++;
+              
+              const eraSection = document.createElement('div');
+              eraSection.className = 'era-section';
+              
+              const eraHeader = document.createElement('div');
+              eraHeader.className = 'era-header';
+              eraHeader.setAttribute('role', 'button');
+              eraHeader.setAttribute('aria-expanded', 'true');
+              eraHeader.setAttribute('tabindex', '0');
+              eraHeader.innerHTML = `
+                <span>${era.name} Era (${era.start} ${era.start < 0 ? 'BCE' : 'CE'} - ${era.end} CE)</span>
+                <span>${eraInventions.length} inventions</span>
+              `;
+              
+              const eraContent = document.createElement('div');
+              eraContent.className = 'era-content';
+              
+              eraInventions.forEach(inv => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.innerHTML = `
+                  <span class="year">${inv.year < 0 ? `${Math.abs(inv.year)} BCE` : `${inv.year} CE`}</span>
+                  <h3>${inv.name}</h3>
+                  <p class="inventor">${inv.inventor}</p>
+                  <span class="category">${inv.category}</span>
+                `;
+                eraContent.appendChild(item);
+              });
+              
+              eraSection.appendChild(eraHeader);
+              eraSection.appendChild(eraContent);
+              container.appendChild(eraSection);
+              
+              eraHeader.addEventListener('click', () => {
+                const isExpanded = eraContent.style.display !== 'none';
+                eraContent.style.display = isExpanded ? 'none' : 'grid';
+                eraHeader.setAttribute('aria-expanded', !isExpanded);
+              });
+
+              eraHeader.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  eraHeader.click();
+                }
+              });
+            }
+          });
+
+          countElement.textContent = data.length;
+          eraCountElement.textContent = visibleEras;
+          loading.style.display = 'none';
+        }
+
+        // Initial render with all inventions
+        renderInventions(inventions);
+      } catch (error) {
+        console.error('Error initializing timeline:', error);
+        container.innerHTML = '<p style="text-align: center; color: red;">Error loading timeline. Please try again later.</p>';
+        loading.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
